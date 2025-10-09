@@ -1,57 +1,77 @@
-# 📚 Cronograma de Estudo Personalizado
+# Cronograma de Estudo Personalizado
 
-Uma ferramenta web completa para gerar cronogramas de estudo personalizados, tanto para quem tem prova quanto para quem estuda continuamente.
+Uma ferramenta web completa para gerar cronogramas de estudo personalizados, desenvolvida para estudantes que precisam organizar seus estudos de forma eficiente e adaptada às suas necessidades específicas.
 
-## ✨ Funcionalidades
+## Visão Geral
 
-- **Cronograma Personalizado**: Adaptado às suas necessidades e disponibilidade
-- **Modo Contagem Regressiva**: Para quem tem prova marcada
-- **Modo Contínuo**: Para estudo regular sem data específica
-- **Priorização por Peso**: Matérias com maior peso recebem mais tempo
-- **Dias Personalizáveis**: Escolha quais dias da semana estudar
-- **Exportação**: Salve em Excel (.xlsx) ou PDF
-- **Histórico Local**: Salve e carregue cronogramas anteriores
-- **Guia Completo**: Tutorial detalhado com dicas e exemplos práticos
-- **Design Responsivo**: Funciona perfeitamente em desktop e mobile
+Esta aplicação web permite criar cronogramas de estudo personalizados baseados em:
+- Disponibilidade de tempo do usuário
+- Priorização de matérias através de sistema de pesos
+- Modo contagem regressiva para provas específicas
+- Modo contínuo para estudo regular
 
-## 🚀 Como Usar
+## Funcionalidades Principais
 
-### 📖 Guia Completo de Uso
-A ferramenta inclui um **guia detalhado** com:
-- Explicação completa de como funciona o sistema
-- Instruções passo a passo para cada configuração
-- Exemplos práticos de cálculo de pesos
-- Dicas para melhores resultados
-- Perguntas frequentes (FAQ)
-- Tutorial do algoritmo de distribuição
+### Cronograma Personalizado
+- Adaptação às necessidades e disponibilidade do usuário
+- Sistema de pesos para priorização de matérias
+- Rotação inteligente para evitar repetição consecutiva
 
-**Para acessar:** Clique na aba "📖 Guia de Uso" no topo da página.
+### Modos de Operação
+- **Contagem Regressiva**: Para provas com data específica
+- **Contínuo**: Para estudo regular sem prazo definido
 
-### 1. Configurações Básicas
-- **Data da Prova** (opcional): Se informada, o cronograma será gerado contando regressivamente até a prova
-- **Horas por Dia**: Quantas horas você quer estudar diariamente (1-12h)
-- **Dias Disponíveis**: Marque os dias da semana que você pode estudar
+### Configurações Flexíveis
+- Seleção de dias da semana disponíveis
+- Definição de horas de estudo por dia (1-12h)
+- Sistema de pesos de 1 a 10 para cada matéria
 
-### 2. Adicionar Matérias
-- Clique em "+ Adicionar Matéria" para incluir novas disciplinas
-- **Nome da Matéria**: Ex: Matemática, História, Química
-- **Peso**: Prioridade/dificuldade/tamanho do conteúdo (1-10)
-  - Peso 1: Matéria mais fácil/pequena
-  - Peso 10: Matéria mais difícil/grande
+### Exportação e Persistência
+- Exportação para Excel (.xlsx) editável
+- Exportação para PDF para impressão
+- Salvamento local com histórico de cronogramas
+- Carregamento de cronogramas anteriores
 
-### 3. Gerar Cronograma
-- Clique em "Gerar Cronograma"
-- O sistema calculará automaticamente:
-  - Distribuição proporcional das horas por matéria
-  - Rotação para evitar repetir a mesma matéria em sequência
-  - Otimização para os dias disponíveis
+### Interface e Usabilidade
+- Design responsivo para desktop e mobile
+- Interface intuitiva e moderna
+- Guia completo de uso integrado
+- FAQ e exemplos práticos
 
-### 4. Exportar e Salvar
-- **📊 Exportar Excel**: Baixa arquivo .xlsx editável
-- **📄 Exportar PDF**: Baixa documento para impressão/compartilhamento
-- **💾 Salvar Cronograma**: Salva localmente para carregar depois
+## Instalação e Uso
 
-## 🧮 Como Funciona a Lógica
+### Requisitos
+- Navegador web moderno (Chrome, Firefox, Safari, Edge)
+- JavaScript habilitado
+
+### Instalação
+1. Clone ou baixe o repositório
+2. Abra o arquivo `index.html` em qualquer navegador
+3. A aplicação estará pronta para uso
+
+### Uso Básico
+
+#### 1. Configurações Iniciais
+- **Data da Prova** (opcional): Define modo contagem regressiva
+- **Horas por Dia**: Quantidade de horas de estudo diárias
+- **Dias Disponíveis**: Seleção dos dias da semana
+
+#### 2. Configuração de Matérias
+- Adicionar matérias com nome e peso
+- Peso 1: Matéria mais fácil/pequena
+- Peso 10: Matéria mais difícil/extensa
+
+#### 3. Geração do Cronograma
+- Cálculo automático da distribuição proporcional
+- Rotação para evitar repetição consecutiva
+- Otimização para dias disponíveis
+
+#### 4. Exportação e Salvamento
+- Exportar para Excel para edição posterior
+- Exportar para PDF para impressão
+- Salvar cronograma localmente
+
+## Algoritmo de Distribuição
 
 ### Cálculo de Pesos
 ```
@@ -59,7 +79,7 @@ Peso Relativo = Peso da Matéria / Soma de Todos os Pesos
 Horas por Matéria = Peso Relativo × Total de Horas Disponíveis
 ```
 
-### Exemplo Prático
+### Exemplo de Cálculo
 - **Matérias**: Matemática (peso 3), História (peso 1), Química (peso 2)
 - **Total de pesos**: 6
 - **Total de horas**: 30h
@@ -69,64 +89,69 @@ Horas por Matéria = Peso Relativo × Total de Horas Disponíveis
   - Química: (2/6) × 30h = 10h
 
 ### Modo Contagem Regressiva
-- Calcula dias entre hoje e a data da prova
-- Considera apenas os dias da semana selecionados
-- Distribui as horas proporcionalmente até a prova
+- Cálculo de dias entre data atual e prova
+- Consideração apenas dos dias selecionados
+- Distribuição proporcional até a data da prova
 
 ### Modo Contínuo
-- Gera cronograma para 30 dias
+- Geração de cronograma para 30 dias
 - Distribuição equilibrada baseada nos pesos
 - Ideal para estudo regular sem prazo específico
 
-## 💾 Salvamento Local
+## Arquitetura Técnica
 
-- Todos os cronogramas são salvos no navegador (localStorage)
-- Não há necessidade de cadastro ou login
-- Dados ficam disponíveis mesmo após fechar o navegador
-- Possibilidade de carregar cronogramas anteriores
+### Tecnologias Utilizadas
+- **Frontend**: HTML5, CSS3, JavaScript ES6+
+- **Bibliotecas**: SheetJS (Excel), jsPDF (PDF)
+- **Armazenamento**: localStorage para persistência
+- **Design**: CSS Grid, Flexbox, Media Queries
 
-## 🎨 Design e Usabilidade
+### Funcionalidades Técnicas
+- Cálculo dinâmico de distribuição de tempo
+- Rotação inteligente de matérias
+- Exportação de dados para múltiplos formatos
+- Persistência local de dados
+- Interface responsiva
 
-- **Interface Intuitiva**: Fácil de usar, sem complicações
-- **Design Moderno**: Visual atrativo e profissional
-- **Responsivo**: Funciona perfeitamente em celulares e tablets
-- **Acessível**: Cores contrastantes e navegação clara
+## Compatibilidade
 
-## 🔧 Tecnologias Utilizadas
+### Navegadores Suportados
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
 
-- **HTML5**: Estrutura semântica
-- **CSS3**: Design responsivo e moderno
-- **JavaScript ES6+**: Lógica de cálculo e interatividade
-- **SheetJS**: Exportação para Excel
-- **jsPDF**: Exportação para PDF
-- **localStorage**: Persistência de dados
+### Dispositivos
+- Desktop (Windows, macOS, Linux)
+- Tablet (iPad, Android)
+- Mobile (iOS, Android)
 
-## 📱 Compatibilidade
+### Recursos
+- Funciona offline após carregamento inicial
+- Não requer servidor ou conexão contínua
+- Dados salvos localmente no navegador
 
-- ✅ Chrome, Firefox, Safari, Edge
-- ✅ Desktop, Tablet, Mobile
-- ✅ Windows, macOS, Linux, Android, iOS
-- ✅ Funciona offline após carregar a página
+## Licença
 
-## 🚀 Como Executar
+Este projeto está sob uma licença não comercial. Veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
 
-1. Baixe todos os arquivos (`index.html`, `styles.css`, `script.js`)
-2. Abra o arquivo `index.html` em qualquer navegador
-3. Comece a usar imediatamente!
+## Suporte
 
-## 📋 Exemplo de Uso
+Para dúvidas, sugestões ou problemas:
+- Abra uma issue no repositório
+- Consulte a seção FAQ na aplicação
+- Verifique o guia de uso integrado
 
-### Cenário: Prova em 2 semanas
-1. **Data da Prova**: 15 dias no futuro
-2. **Horas por Dia**: 3h
-3. **Dias Disponíveis**: Segunda, Quarta, Sexta
-4. **Matérias**:
-   - Matemática (peso 4)
-   - Português (peso 2)
-   - História (peso 1)
+## Changelog
 
-**Resultado**: Cronograma com 9 dias de estudo, distribuindo 27 horas totais proporcionalmente às matérias.
+### Versão Atual
+- Sistema de pesos para priorização
+- Modos contagem regressiva e contínuo
+- Exportação Excel e PDF
+- Histórico local de cronogramas
+- Interface responsiva
+- Blog com conteúdo educacional
 
 ---
 
-**Desenvolvido para estudantes que querem organizar seus estudos de forma eficiente e personalizada!** 🎓
+**Desenvolvido para estudantes que buscam organização e eficiência em seus estudos.**
