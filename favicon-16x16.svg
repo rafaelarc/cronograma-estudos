@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs>
+    <linearGradient id="book1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="book2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E91E63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C2185B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="book3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="8" cy="8" r="7" fill="#667eea"/>
+  
+  <!-- Book 1 (front, green) -->
+  <rect x="3" y="4" width="4" height="8" rx="0.5" fill="url(#book1)"/>
+  <rect x="3" y="10" width="4" height="2" fill="#f5f5f5"/>
+  
+  <!-- Book 2 (middle, pink) -->
+  <rect x="5" y="5" width="4" height="8" rx="0.5" fill="url(#book2)"/>
+  <rect x="5" y="11" width="4" height="2" fill="#f5f5f5"/>
+  
+  <!-- Book 3 (back, blue) -->
+  <rect x="7" y="6" width="4" height="8" rx="0.5" fill="url(#book3)"/>
+  <rect x="7" y="12" width="4" height="2" fill="#f5f5f5"/>
+  
+  <!-- Bookmark/cursor -->
+  <rect x="5.5" y="3" width="0.5" height="4" fill="#fff" rx="0.25"/>
+  <rect x="5.25" y="3" width="1" height="1" fill="#fff" rx="0.25"/>
+</svg>

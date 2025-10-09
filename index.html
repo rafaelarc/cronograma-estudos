@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma de Estudo Personalizado - Gerador Gratuito Online</title>
+    <meta name="description" content="Crie cronogramas de estudo personalizados gratuitos. Ferramenta online para gerar cronogramas eficazes com base em pesos das matérias, datas de prova e disponibilidade.">
+    <meta name="keywords" content="cronograma de estudo, gerador cronograma, estudo personalizado, organização estudos, ferramenta estudo">
+    <meta name="author" content="Rafaela Carvalho">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="favicon-16x16.svg" sizes="16x16">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cronogramaestudo.com.br/">
+    <meta property="og:title" content="Cronograma de Estudo Personalizado - Gerador Gratuito">
+    <meta property="og:description" content="Crie cronogramas de estudo personalizados gratuitos. Ferramenta online para gerar cronogramas eficazes.">
+    <meta property="og:image" content="https://cronogramaestudo.com.br/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://cronogramaestudo.com.br/">
+    <meta property="twitter:title" content="Cronograma de Estudo Personalizado - Gerador Gratuito">
+    <meta property="twitter:description" content="Crie cronogramas de estudo personalizados gratuitos. Ferramenta online para gerar cronogramas eficazes.">
+    <meta property="twitter:image" content="https://cronogramaestudo.com.br/og-image.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://cronogramaestudo.com.br/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Cronograma de Estudo Personalizado</h1>
+            <p>Crie seu cronograma de estudos adaptado às suas necessidades</p>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">🏠 Gerador</a>
+                <a href="blog/index.html" class="nav-link">📖 Blog</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Navigation Tabs -->
+            <div class="tab-navigation">
+                <button class="tab-button active" data-tab="generator">📚 Gerar Cronograma</button>
+                <button class="tab-button" data-tab="guide">📖 Guia de Uso</button>
+                <button class="tab-button" data-tab="history">📋 Histórico</button>
+            </div>
+
+            <!-- Generator Tab -->
+            <div class="tab-content active" id="generator-tab">
+                <div class="form-section">
+                    <h2>Configurações do Cronograma</h2>
+                
+                <form id="studyForm">
+                    <div class="form-group">
+                        <label for="examDate">Data da Prova (opcional)</label>
+                        <input type="date" id="examDate" name="examDate">
+                        <small>Deixe em branco para cronograma contínuo</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hoursPerDay">Horas de estudo por dia</label>
+                        <input type="number" id="hoursPerDay" name="hoursPerDay" min="1" max="12" value="3" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dias da semana disponíveis</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="availableDays" value="segunda"> Segunda</label>
+                            <label><input type="checkbox" name="availableDays" value="terca"> Terça</label>
+                            <label><input type="checkbox" name="availableDays" value="quarta"> Quarta</label>
+                            <label><input type="checkbox" name="availableDays" value="quinta"> Quinta</label>
+                            <label><input type="checkbox" name="availableDays" value="sexta"> Sexta</label>
+                            <label><input type="checkbox" name="availableDays" value="sabado"> Sábado</label>
+                            <label><input type="checkbox" name="availableDays" value="domingo"> Domingo</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Matérias de Estudo</label>
+                        <div id="subjectsContainer">
+                            <div class="subject-item">
+                                <input type="text" placeholder="Nome da matéria" class="subject-name" required>
+                                <input type="number" placeholder="Peso" class="subject-weight" min="1" max="10" value="1" required>
+                                <button type="button" class="remove-subject">Remover</button>
+                            </div>
+                        </div>
+                        <button type="button" id="addSubject" class="add-subject-btn">+ Adicionar Matéria</button>
+                    </div>
+
+                    <button type="submit" class="generate-btn">Gerar Cronograma</button>
+                </form>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Seu Cronograma de Estudo</h2>
+                <div class="export-buttons">
+                    <button id="exportExcel" class="export-btn excel">📊 Exportar Excel</button>
+                    <button id="exportPDF" class="export-btn pdf">📄 Exportar PDF</button>
+                    <button id="saveSchedule" class="export-btn save">💾 Salvar Cronograma</button>
+                </div>
+                <div id="scheduleTable"></div>
+            </div>
+
+            </div>
+
+            <!-- Guide Tab -->
+            <div class="tab-content" id="guide-tab">
+                <div class="guide-section">
+                    <h2>📖 Guia Completo de Uso</h2>
+
+                    <br>
+                    
+                    <div class="guide-content">
+                        <div class="guide-section-item">
+                            <h3>🎯 Como Funciona</h3>
+                            <p>Esta ferramenta cria cronogramas de estudo personalizados baseados nas suas necessidades específicas. Você pode usar tanto para preparação para provas quanto para estudo contínuo.</p>
+                            
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <h4>📅 Modo Contagem Regressiva</h4>
+                                    <p>Quando você informa uma data de prova, o sistema calcula quantos dias restam e distribui o tempo de estudo proporcionalmente até a data.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>🔄 Modo Contínuo</h4>
+                                    <p>Sem data específica, gera um cronograma de 30 dias para estudo regular, distribuindo o tempo baseado nos pesos das matérias.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>⚙️ Configurações Básicas</h3>
+                            
+                            <div class="config-item">
+                                <h4>📅 Data da Prova (Opcional)</h4>
+                                <p><strong>Quando usar:</strong> Quando você tem uma prova, concurso ou exame marcado.</p>
+                                <p><strong>Como funciona:</strong> O sistema conta quantos dias restam até a prova e distribui o tempo de estudo apenas nos dias da semana que você selecionou.</p>
+                                <div class="example-box">
+                                    <strong>Exemplo:</strong> Prova em 15 dias, estudando Segunda/Quarta/Sexta = 5 dias de estudo disponíveis
+                                </div>
+                            </div>
+
+                            <div class="config-item">
+                                <h4>⏰ Horas de Estudo por Dia</h4>
+                                <p><strong>Recomendação:</strong> Seja realista com sua disponibilidade. É melhor estudar menos horas consistentemente do que muitas horas esporadicamente.</p>
+                                <p><strong>Limite:</strong> Entre 1 e 12 horas por dia.</p>
+                                <div class="tip-box">
+                                    <strong>💡 Dica:</strong> Comece com 2-3 horas e ajuste conforme sua rotina
+                                </div>
+                            </div>
+
+                            <div class="config-item">
+                                <h4>📆 Dias da Semana Disponíveis</h4>
+                                <p><strong>Importante:</strong> Selecione apenas os dias que você realmente pode estudar.</p>
+                                <p><strong>Flexibilidade:</strong> Você pode alterar a qualquer momento e gerar um novo cronograma.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>📚 Sistema de Pesos das Matérias</h3>
+                            <p>O peso determina quanto tempo cada matéria receberá no cronograma. Quanto maior o peso, mais horas de estudo a matéria terá.</p>
+                            
+                            <div class="weight-explanation">
+                                <h4>Como Calcular o Peso:</h4>
+                                <ul>
+                                    <li><strong>Peso 1-2:</strong> Matérias mais fáceis ou com pouco conteúdo</li>
+                                    <li><strong>Peso 3-4:</strong> Matérias de dificuldade média</li>
+                                    <li><strong>Peso 5-7:</strong> Matérias difíceis ou com muito conteúdo</li>
+                                    <li><strong>Peso 8-10:</strong> Matérias muito difíceis ou críticas para sua aprovação</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-calculation">
+                                <h4>Exemplo Prático:</h4>
+                                <div class="calculation-box">
+                                    <p><strong>Matérias:</strong></p>
+                                    <ul>
+                                        <li>Matemática: Peso 4</li>
+                                        <li>Português: Peso 2</li>
+                                        <li>História: Peso 1</li>
+                                    </ul>
+                                    <p><strong>Total de pesos:</strong> 7</p>
+                                    <p><strong>Total de horas:</strong> 21h (7 dias × 3h/dia)</p>
+                                    <p><strong>Distribuição:</strong></p>
+                                    <ul>
+                                        <li>Matemática: (4/7) × 21h = 12h</li>
+                                        <li>Português: (2/7) × 21h = 6h</li>
+                                        <li>História: (1/7) × 21h = 3h</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>🔄 Algoritmo de Distribuição</h3>
+                            <p>O sistema usa uma lógica inteligente para distribuir as horas de estudo:</p>
+                            
+                            <div class="algorithm-steps">
+                                <div class="step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Calcula Proporções</h4>
+                                        <p>Determina quantas horas cada matéria deve receber baseado no peso</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>Distribui por Dias</h4>
+                                        <p>Espalha as horas pelos dias disponíveis de forma equilibrada</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>Evita Repetição</h4>
+                                        <p>Rotaciona as matérias para não repetir a mesma matéria em dias consecutivos</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h4>Otimiza Sequência</h4>
+                                        <p>Organiza a ordem das matérias para maximizar o aprendizado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>💾 Salvamento e Exportação</h3>
+                            
+                            <div class="export-options">
+                                <div class="export-option">
+                                    <h4>📊 Exportar Excel</h4>
+                                    <p>Gera um arquivo .xlsx editável que você pode:</p>
+                                    <ul>
+                                        <li>Modificar horários conforme necessário</li>
+                                        <li>Adicionar notas e observações</li>
+                                        <li>Compartilhar com colegas ou professores</li>
+                                        <li>Usar em outras ferramentas de produtividade</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="export-option">
+                                    <h4>📄 Exportar PDF</h4>
+                                    <p>Cria um documento profissional para:</p>
+                                    <ul>
+                                        <li>Imprimir e colar na parede</li>
+                                        <li>Compartilhar via WhatsApp ou email</li>
+                                        <li>Manter como referência offline</li>
+                                        <li>Apresentar em reuniões de estudo</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="export-option">
+                                    <h4>💾 Salvar Localmente</h4>
+                                    <p>Armazena o cronograma no navegador para:</p>
+                                    <ul>
+                                        <li>Carregar rapidamente depois</li>
+                                        <li>Comparar diferentes versões</li>
+                                        <li>Manter histórico de estudos</li>
+                                        <li>Continuar de onde parou</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>🎯 Dicas para Melhores Resultados</h3>
+                            
+                            <div class="tips-grid">
+                                <div class="tip-card">
+                                    <h4>🎯 Seja Específico</h4>
+                                    <p>Em vez de "Matemática", use "Matemática - Álgebra" ou "Matemática - Geometria" para cronogramas mais precisos.</p>
+                                </div>
+                                
+                                <div class="tip-card">
+                                    <h4>⚖️ Balanceie os Pesos</h4>
+                                    <p>Não coloque todas as matérias com peso 10. Use uma escala de 1-10 para ter variedade.</p>
+                                </div>
+                                
+                                <div class="tip-card">
+                                    <h4>📅 Revise Semanalmente</h4>
+                                    <p>Gere um novo cronograma toda semana baseado no seu progresso e mudanças na agenda.</p>
+                                </div>
+                                
+                                <div class="tip-card">
+                                    <h4>🔄 Ajuste Conforme Necessário</h4>
+                                    <p>Se uma matéria está mais difícil que esperado, aumente o peso e gere um novo cronograma.</p>
+                                </div>
+                                
+                                <div class="tip-card">
+                                    <h4>📱 Use em Dispositivos Móveis</h4>
+                                    <p>O site funciona perfeitamente no celular. Salve o cronograma como PDF e tenha sempre à mão.</p>
+                                </div>
+                                
+                                <div class="tip-card">
+                                    <h4>👥 Compartilhe com Colegas</h4>
+                                    <p>Exporte em PDF e compartilhe com amigos de estudo para coordenar sessões em grupo.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item" id="faq">
+                            <h3>❓ Perguntas Frequentes</h3>
+                            
+                            <div class="faq">
+                                <div class="faq-item">
+                                    <h4>Posso alterar o cronograma depois de gerado?</h4>
+                                    <p>Sim! Você pode exportar para Excel e editar, ou simplesmente alterar as configurações e gerar um novo cronograma.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h4>O que acontece se eu não conseguir estudar em um dia?</h4>
+                                    <p>O cronograma é flexível. Você pode pular um dia e continuar no próximo, ou redistribuir as horas nos dias restantes.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h4>Posso usar para mais de uma prova ao mesmo tempo?</h4>
+                                    <p>Recomendamos criar cronogramas separados para cada prova, mas você pode incluir todas as matérias em um só cronograma.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h4>Os dados ficam salvos se eu fechar o navegador?</h4>
+                                    <p>Sim! Todos os cronogramas salvos ficam armazenados localmente e estarão disponíveis na próxima vez que você acessar o site.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h4>Posso usar em diferentes dispositivos?</h4>
+                                    <p>Os dados ficam salvos apenas no navegador onde você salvou. Para usar em outros dispositivos, exporte em PDF ou Excel.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-section-item">
+                            <h3>🚀 Começando Agora</h3>
+                            <div class="getting-started">
+                                <ol>
+                                    <li><strong>Clique na aba "Gerar Cronograma"</strong> para voltar ao formulário</li>
+                                    <li><strong>Configure suas preferências</strong> seguindo as dicas acima</li>
+                                    <li><strong>Adicione suas matérias</strong> com pesos realistas</li>
+                                    <li><strong>Gere seu cronograma</strong> e veja a mágica acontecer!</li>
+                                    <li><strong>Exporte ou salve</strong> para começar seus estudos</li>
+                                </ol>
+                                <div class="cta-box">
+                                    <p><strong>Pronto para começar?</strong></p>
+                                    <button class="cta-button" onclick="switchTab('generator')">🚀 Gerar Meu Cronograma</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history-tab">
+                <div class="history-section">
+                    <h2>📋 Cronogramas Salvos</h2>
+                    <div id="savedSchedules"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p class="footer-text">Desenvolvido com ❤️ e JavaScript.</p>
+            <div class="footer-buttons">
+                <button class="footer-btn faq-btn" onclick="showFAQ()">FAQ</button>
+                <button class="footer-btn coffee-btn" onclick="buyCoffee()">Me compre um café</button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
