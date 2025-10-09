@@ -8,28 +8,43 @@ class StudyScheduleGenerator {
 
     initializeEventListeners() {
         // Form submission
-        document.getElementById('studyForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.generateSchedule();
-        });
+        const studyForm = document.getElementById('studyForm');
+        if (studyForm) {
+            studyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.generateSchedule();
+            });
+        }
 
         // Add subject button
-        document.getElementById('addSubject').addEventListener('click', () => {
-            this.addSubjectField();
-        });
+        const addSubjectBtn = document.getElementById('addSubject');
+        if (addSubjectBtn) {
+            addSubjectBtn.addEventListener('click', () => {
+                this.addSubjectField();
+            });
+        }
 
         // Export buttons
-        document.getElementById('exportExcel').addEventListener('click', () => {
-            this.exportToExcel();
-        });
+        const exportExcelBtn = document.getElementById('exportExcel');
+        if (exportExcelBtn) {
+            exportExcelBtn.addEventListener('click', () => {
+                this.exportToExcel();
+            });
+        }
 
-        document.getElementById('exportPDF').addEventListener('click', () => {
-            this.exportToPDF();
-        });
+        const exportPDFBtn = document.getElementById('exportPDF');
+        if (exportPDFBtn) {
+            exportPDFBtn.addEventListener('click', () => {
+                this.exportToPDF();
+            });
+        }
 
-        document.getElementById('saveSchedule').addEventListener('click', () => {
-            this.saveCurrentSchedule();
-        });
+        const saveScheduleBtn = document.getElementById('saveSchedule');
+        if (saveScheduleBtn) {
+            saveScheduleBtn.addEventListener('click', () => {
+                this.saveCurrentSchedule();
+            });
+        }
 
         // Tab navigation
         document.querySelectorAll('.tab-button').forEach(button => {
@@ -41,11 +56,16 @@ class StudyScheduleGenerator {
 
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('examDate').setAttribute('min', today);
+        const examDateInput = document.getElementById('examDate');
+        if (examDateInput) {
+            examDateInput.setAttribute('min', today);
+        }
     }
 
     addSubjectField() {
         const container = document.getElementById('subjectsContainer');
+        if (!container) return;
+        
         const subjectItem = document.createElement('div');
         subjectItem.className = 'subject-item';
         subjectItem.innerHTML = `
@@ -63,8 +83,15 @@ class StudyScheduleGenerator {
     }
 
     getFormData() {
-        const examDate = document.getElementById('examDate').value;
-        const hoursPerDay = parseInt(document.getElementById('hoursPerDay').value);
+        const examDateInput = document.getElementById('examDate');
+        const hoursPerDayInput = document.getElementById('hoursPerDay');
+        
+        if (!examDateInput || !hoursPerDayInput) {
+            return null;
+        }
+        
+        const examDate = examDateInput.value;
+        const hoursPerDay = parseInt(hoursPerDayInput.value);
         const availableDays = Array.from(document.querySelectorAll('input[name="availableDays"]:checked'))
             .map(checkbox => checkbox.value);
 
@@ -239,6 +266,11 @@ class StudyScheduleGenerator {
     generateSchedule() {
         const formData = this.getFormData();
         
+        if (!formData) {
+            console.log('Formulário não encontrado - página do blog');
+            return;
+        }
+        
         if (!this.validateFormData(formData)) {
             return;
         }
@@ -246,8 +278,11 @@ class StudyScheduleGenerator {
         try {
             this.currentSchedule = this.calculateSchedule(formData);
             this.displaySchedule();
-            document.getElementById('resultsSection').style.display = 'block';
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+            const resultsSection = document.getElementById('resultsSection');
+            if (resultsSection) {
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
         } catch (error) {
             console.error('Erro ao gerar cronograma:', error);
             alert('Erro ao gerar cronograma. Verifique os dados inseridos.');
@@ -258,6 +293,8 @@ class StudyScheduleGenerator {
         if (!this.currentSchedule) return;
 
         const tableContainer = document.getElementById('scheduleTable');
+        if (!tableContainer) return;
+        
         const { schedule, summary } = this.currentSchedule;
 
         let tableHTML = `
@@ -339,6 +376,8 @@ class StudyScheduleGenerator {
         }
 
         const { schedule } = this.currentSchedule;
+        if (!schedule) return;
+        
         const data = [];
 
         // Headers
@@ -388,6 +427,13 @@ class StudyScheduleGenerator {
         }
 
         const { jsPDF } = window.jspdf;
+        if (!jsPDF) {
+            alert('Biblioteca PDF não carregada.');
+            return;
+        }
+        
+        const { schedule } = this.currentSchedule;
+        if (!schedule) return;
         const doc = new jsPDF();
         
         // Title
@@ -516,8 +562,11 @@ class StudyScheduleGenerator {
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         
         // Add active class to selected tab and button
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-        document.getElementById(`${tabName}-tab`).classList.add('active');
+        const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
+        const tabContent = document.getElementById(`${tabName}-tab`);
+        
+        if (tabButton) tabButton.classList.add('active');
+        if (tabContent) tabContent.classList.add('active');
         
         // If switching to history tab, load the history
         if (tabName === 'history') {
@@ -527,6 +576,7 @@ class StudyScheduleGenerator {
 
     loadHistory() {
         const savedSchedules = document.getElementById('savedSchedules');
+        if (!savedSchedules) return;
         
         if (this.schedules.length === 0) {
             savedSchedules.innerHTML = `
@@ -572,8 +622,11 @@ class StudyScheduleGenerator {
         // Load form data
         const formData = schedule.formData;
         
-        document.getElementById('examDate').value = formData.examDate || '';
-        document.getElementById('hoursPerDay').value = formData.hoursPerDay;
+        const examDateInput = document.getElementById('examDate');
+        const hoursPerDayInput = document.getElementById('hoursPerDay');
+        
+        if (examDateInput) examDateInput.value = formData.examDate || '';
+        if (hoursPerDayInput) hoursPerDayInput.value = formData.hoursPerDay;
         
         // Clear existing checkboxes
         document.querySelectorAll('input[name="availableDays"]').forEach(cb => cb.checked = false);
@@ -586,21 +639,30 @@ class StudyScheduleGenerator {
         
         // Clear and populate subjects
         const subjectsContainer = document.getElementById('subjectsContainer');
-        subjectsContainer.innerHTML = '';
-        
-        formData.subjects.forEach(subject => {
-            this.addSubjectField();
-            const lastItem = subjectsContainer.lastElementChild;
-            lastItem.querySelector('.subject-name').value = subject.name;
-            lastItem.querySelector('.subject-weight').value = subject.weight;
-        });
+        if (subjectsContainer) {
+            subjectsContainer.innerHTML = '';
+            
+            formData.subjects.forEach(subject => {
+                this.addSubjectField();
+                const lastItem = subjectsContainer.lastElementChild;
+                if (lastItem) {
+                    const nameInput = lastItem.querySelector('.subject-name');
+                    const weightInput = lastItem.querySelector('.subject-weight');
+                    if (nameInput) nameInput.value = subject.name;
+                    if (weightInput) weightInput.value = subject.weight;
+                }
+            });
+        }
         
         // Load schedule data
         this.currentSchedule = schedule.data;
         this.displaySchedule();
         
-        document.getElementById('resultsSection').style.display = 'block';
-        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     deleteSchedule(scheduleId) {
