@@ -30,7 +30,8 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://cronogramaestudo.com.br/">
     
-    <!-- Favicon -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -42,12 +43,17 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>📚 Cronograma de Estudo Personalizado</h1>
-            <p>Crie seu cronograma de estudos adaptado às suas necessidades</p>
-            <nav class="main-nav">
-                <a href="index.html" class="nav-link active">🏠 Gerador</a>
-                <a href="blog/index.html" class="nav-link">📖 Blog</a>
+        <header class="site-header">
+            <div class="brand">
+                <img src="logo.svg" alt="" class="brand-logo" width="52" height="52" aria-hidden="true">
+                <div class="brand-text">
+                    <h1>Cronograma de Estudo Personalizado</h1>
+                    <p class="header-subtitle">Crie seu cronograma de estudos adaptado às suas necessidades</p>
+                </div>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html" class="nav-link active">Gerador</a>
+                <a href="blog/index.html" class="nav-link">Blog</a>
             </nav>
         </header>
 

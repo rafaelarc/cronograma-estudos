@@ -16,12 +16,17 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>📚 Blog - Cronograma de Estudo</h1>
-            <p>Dicas e estratégias para otimizar seus estudos</p>
-            <nav class="blog-nav">
-                <a href="../index.html" class="nav-link">🏠 Voltar ao Gerador</a>
-                <a href="index.html" class="nav-link">📖 Blog</a>
+        <header class="site-header">
+            <div class="brand">
+                <img src="../logo.svg" alt="" class="brand-logo" width="52" height="52" aria-hidden="true">
+                <div class="brand-text">
+                    <h1>Blog — Cronograma de Estudo</h1>
+                    <p class="header-subtitle">Dicas e estratégias para otimizar seus estudos</p>
+                </div>
+            </div>
+            <nav class="site-nav">
+                <a href="../index.html" class="nav-link">Gerador</a>
+                <a href="index.html" class="nav-link active">Blog</a>
             </nav>
         </header>
 
@@ -270,17 +275,17 @@
                 </article>
             </div>
         </main>
-
-        <footer class="site-footer">
-            <div class="footer-content">
-                <p class="footer-text">Desenvolvido com ❤️ e JavaScript.</p>
-                <div class="footer-buttons">
-                    <button class="footer-btn faq-btn" onclick="showFAQ()">FAQ</button>
-                    <button class="footer-btn coffee-btn" onclick="buyCoffee()">Me compre um café</button>
-                </div>
-            </div>
-        </footer>
     </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p class="footer-text">Desenvolvido com ❤️ e JavaScript.</p>
+            <div class="footer-buttons">
+                <button class="footer-btn faq-btn" onclick="showFAQ()">FAQ</button>
+                <button class="footer-btn coffee-btn" onclick="buyCoffee()">Me compre um café</button>
+            </div>
+        </div>
+    </footer>
 
     <script src="../script.js"></script>
 </body>

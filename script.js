@@ -54,11 +54,10 @@ class StudyScheduleGenerator {
             });
         });
 
-        // Set minimum date to today
-        const today = new Date().toISOString().split('T')[0];
+        // Set minimum date to today (local)
         const examDateInput = document.getElementById('examDate');
         if (examDateInput) {
-            examDateInput.setAttribute('min', today);
+            examDateInput.setAttribute('min', this.getLocalDateString());
         }
     }
 
@@ -125,9 +124,8 @@ class StudyScheduleGenerator {
         }
 
         if (data.examDate) {
-            const examDate = new Date(data.examDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const examDate = this.parseLocalDate(data.examDate);
+            const today = this.getTodayLocal();
             
             if (examDate <= today) {
                 alert('A data da prova deve ser futura.');
@@ -147,10 +145,9 @@ class StudyScheduleGenerator {
         // Calculate available days
         let studyDays = [];
         if (examDate) {
-            // Countdown mode - calculate days until exam
-            const examDateObj = new Date(examDate);
-            const today = new Date();
-            const daysUntilExam = Math.ceil((examDateObj - today) / (1000 * 60 * 60 * 24));
+            const examDateObj = this.parseLocalDate(examDate);
+            const today = this.getTodayLocal();
+            const daysUntilExam = Math.round((examDateObj - today) / (1000 * 60 * 60 * 24));
             
             // Generate study days considering available days of week
             const dayNames = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
@@ -169,7 +166,7 @@ class StudyScheduleGenerator {
         } else {
             // Continuous mode - generate 30 days
             const dayNames = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-            const today = new Date();
+            const today = this.getTodayLocal();
             
             for (let i = 0; i < 30; i++) {
                 const currentDate = new Date(today);
@@ -344,7 +341,7 @@ class StudyScheduleGenerator {
                 <h3>Resumo do Cronograma</h3>
                 <p><strong>Total de dias de estudo:</strong> ${summary.totalDays}</p>
                 <p><strong>Total de horas:</strong> ${summary.totalHours}h</p>
-                ${summary.examDate ? `<p><strong>Data da prova:</strong> ${this.formatDate(new Date(summary.examDate))}</p>` : ''}
+                ${summary.examDate ? `<p><strong>Data da prova:</strong> ${this.formatDate(summary.examDate)}</p>` : ''}
                 <h4>Distribuição por Matéria:</h4>
                 <ul>
                     ${summary.subjects.map(subject => 
@@ -357,8 +354,33 @@ class StudyScheduleGenerator {
         tableContainer.innerHTML = tableHTML + summaryHTML;
     }
 
+    parseLocalDate(dateString) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day);
+    }
+
+    getTodayLocal() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return today;
+    }
+
+    getLocalDateString(date = new Date()) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     formatDate(date) {
-        const dateObj = date instanceof Date ? date : new Date(date);
+        let dateObj;
+        if (date instanceof Date) {
+            dateObj = date;
+        } else if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            dateObj = this.parseLocalDate(date);
+        } else {
+            dateObj = new Date(date);
+        }
         if (isNaN(dateObj.getTime())) {
             return '';
         }
@@ -463,7 +485,7 @@ class StudyScheduleGenerator {
         yPosition += 7;
         
         if (summary.examDate) {
-            doc.text(`Data da prova: ${this.formatDate(new Date(summary.examDate))}`, 20, yPosition);
+            doc.text(`Data da prova: ${this.formatDate(summary.examDate)}`, 20, yPosition);
             yPosition += 7;
         }
         
@@ -603,7 +625,7 @@ class StudyScheduleGenerator {
                        <strong>Horas:</strong> ${schedule.data.summary.totalHours}h | 
                        <strong>Matérias:</strong> ${schedule.data.summary.subjects.length}</p>
                     ${schedule.data.summary.examDate ? 
-                        `<p><strong>Prova:</strong> ${this.formatDate(new Date(schedule.data.summary.examDate))}</p>` : 
+                        `<p><strong>Prova:</strong> ${this.formatDate(schedule.data.summary.examDate)}</p>` : 
                         '<p><strong>Tipo:</strong> Cronograma contínuo</p>'
                     }
                 </div>
