@@ -358,7 +358,11 @@ class StudyScheduleGenerator {
     }
 
     formatDate(date) {
-        return date.toLocaleDateString('pt-BR', {
+        const dateObj = date instanceof Date ? date : new Date(date);
+        if (isNaN(dateObj.getTime())) {
+            return '';
+        }
+        return dateObj.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
@@ -619,8 +623,13 @@ class StudyScheduleGenerator {
         const schedule = this.schedules.find(s => s.id === scheduleId);
         if (!schedule) return;
 
-        // Load form data
+        this.switchTab('generator');
+
         const formData = schedule.formData;
+        if (!formData) {
+            alert('Não foi possível carregar as configurações deste cronograma.');
+            return;
+        }
         
         const examDateInput = document.getElementById('examDate');
         const hoursPerDayInput = document.getElementById('hoursPerDay');
